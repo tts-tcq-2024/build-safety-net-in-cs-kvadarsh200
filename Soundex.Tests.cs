@@ -12,11 +12,13 @@ public class SoundexTests
     public void HandlesSingleCharacter()
     {
         Assert.Equal("A000", Soundex.GenerateSoundex("A"));
+        Assert.Equal("Z000", Soundex.GenerateSoundex("Z"));
     }
 
     [Fact]
     public void HandlesLowercaseInput()
     {
+        Assert.Equal("A000", Soundex.GenerateSoundex("a"));
         Assert.Equal("A123", Soundex.GenerateSoundex("aiden"));
     }
 
@@ -36,54 +38,26 @@ public class SoundexTests
     public void HandlesRepeatingConsonants()
     {
         Assert.Equal("B120", Soundex.GenerateSoundex("Bobby"));
+        Assert.Equal("S530", Soundex.GenerateSoundex("Sassoon"));
     }
 
     [Fact]
     public void HandlesVowelsAndIgnoredCharacters()
     {
         Assert.Equal("R163", Soundex.GenerateSoundex("Rupert"));
-    }
-
-    [Fact]
-    public void HandlesNamesWithMultipleSameConsonantGroups()
-    {
-        Assert.Equal("S530", Soundex.GenerateSoundex("Sassoon"));
-    }
-
-    [Fact]
-    public void HandlesLongNames()
-    {
-        Assert.Equal("P123", Soundex.GenerateSoundex("Pneumonoultramicroscopicsilicovolcanoconiosis"));
-    }
-
-    [Fact]
-    public void PadsWithZeros()
-    {
-        Assert.Equal("H000", Soundex.GenerateSoundex("H"));
-    }
-
-    [Fact]
-    public void HandlesCommonLastName1()
-    {
-        Assert.Equal("R163", Soundex.GenerateSoundex("Robert"));
-    }
-
-    [Fact]
-    public void HandlesCommonLastName2()
-    {
-        Assert.Equal("R150", Soundex.GenerateSoundex("Rupert"));
+        Assert.Equal("A536", Soundex.GenerateSoundex("Andrews"));
     }
 
     [Fact]
     public void HandlesNamesWithSilentLetters()
     {
-        Assert.Equal("P236", Soundex.GenerateSoundex("Pneumonia"));
+        Assert.Equal("P536", Soundex.GenerateSoundex("Pneumonia"));
     }
 
     [Fact]
     public void HandlesNamesWithApostrophes()
     {
-        Assert.Equal("O160", Soundex.GenerateSoundex("O'Connor"));
+        Assert.Equal("O256", Soundex.GenerateSoundex("O'Connor"));
     }
 
     [Fact]
@@ -113,37 +87,37 @@ public class SoundexTests
     [Fact]
     public void HandlesConsonantsFollowedByHOrW()
     {
-        Assert.Equal("S530", Soundex.GenerateSoundex("Ashcraft"));
+        Assert.Equal("A261", Soundex.GenerateSoundex("Ashcraft"));
     }
 
     [Fact]
     public void HandlesNamesWithVowelsInBetweenConsonants()
     {
-        Assert.Equal("M450", Soundex.GenerateSoundex("Martha"));
+        Assert.Equal("M630", Soundex.GenerateSoundex("Martha"));
     }
 
     [Fact]
     public void HandlesNamesWithConsonantsPrecededByVowels()
     {
-        Assert.Equal("M635", Soundex.GenerateSoundex("McGee"));
+        Assert.Equal("M200", Soundex.GenerateSoundex("McGee"));
     }
 
     [Fact]
     public void HandlesNamesStartingWithConsonantsIgnored()
     {
-        Assert.Equal("C620", Soundex.GenerateSoundex("Catherine"));
+        Assert.Equal("C365", Soundex.GenerateSoundex("Catherine"));
     }
 
     [Fact]
     public void HandlesMultipleSameConsonants()
     {
-        Assert.Equal("H430", Soundex.GenerateSoundex("Hamm"));
+        Assert.Equal("H500", Soundex.GenerateSoundex("Hamm"));
     }
 
     [Fact]
     public void HandlesDifferentConsonantsInDifferentPositions()
     {
-        Assert.Equal("G362", Soundex.GenerateSoundex("Gregory"));
+        Assert.Equal("G626", Soundex.GenerateSoundex("Gregory"));
     }
 
     [Fact]

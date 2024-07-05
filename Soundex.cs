@@ -19,15 +19,19 @@ public class Soundex
         soundex.Append(char.ToUpper(name[0]));
         int sIndex = 1;
 
+        ProcessName(name, soundex, ref sIndex);
+        FinalizeSoundex(soundex, sIndex);
+
+        return soundex.ToString();
+    }
+
+    private static void ProcessName(string name, StringBuilder soundex, ref int sIndex)
+    {
         for (int i = 1; i < name.Length && sIndex < 4; i++)
         {
             char code = GetSoundexCode(name[i]);
             AppendSoundexCode(code, soundex, ref sIndex);
         }
-
-        FinalizeSoundex(soundex, sIndex);
-
-        return soundex.ToString();
     }
 
     private static void FinalizeSoundex(StringBuilder soundex, int sIndex)

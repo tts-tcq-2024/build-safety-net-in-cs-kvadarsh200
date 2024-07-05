@@ -1,56 +1,51 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 
-public class Soundex
+public static class Soundex
 {
-    private static readonly Dictionary<char, char> SoundexMapping = new Dictionary<char, char>
-    {
-        {'B', '1'}, {'F', '1'}, {'P', '1'}, {'V', '1'},
-        {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'}, {'Q', '2'}, 
-        {'S', '2'}, {'X', '2'}, {'Z', '2'},
-        {'D', '3'}, {'T', '3'},
-        {'L', '4'}, 
-        {'M', '5'}, {'N', '5'},
-        {'R', '6'}
+    private static readonly int[] SoundexMapping = {
+        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
+        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
+        0, 1, 0, 2, 0, 2
     };
+
+    private static char GetSoundexCode(char c)
+    {
+        c = char.ToUpper(c);
+        if (c < 'A' || c > 'Z')
+        {
+            return '0';
+        }
+        return (char)(SoundexMapping[c - 'A'] + '0');
+    }
 
     public static string GenerateSoundex(string name)
     {
         if (string.IsNullOrEmpty(name))
         {
-            return string.Empty;
+            throw new ArgumentException("Name cannot be null or empty.");
         }
 
         StringBuilder soundex = new StringBuilder();
         soundex.Append(char.ToUpper(name[0]));
-        char prevCode = GetSoundexCode(name[0]);
 
-        for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+        int sIndex = 1;
+        for (int i = 1; i < name.Length && sIndex < 4; i++)
         {
             char code = GetSoundexCode(name[i]);
-            if (code != '0' && code != prevCode)
+            if (code != '0' && code != soundex[sIndex - 1])
             {
                 soundex.Append(code);
-                prevCode = code;
+                sIndex++;
             }
         }
 
-        while (soundex.Length < 4)
+        while (sIndex < 4)
         {
             soundex.Append('0');
+            sIndex++;
         }
 
-        return soundex.ToString();
-    }
-
-    private static char GetSoundexCode(char c)
-    {
-        c = char.ToUpper(c);
-        if (SoundexMapping.TryGetValue(c, out var code))
-        {
-            return code;
-        }
-        return '0';
+        return soundex.ToString().Substring(0, 4);
     }
 }

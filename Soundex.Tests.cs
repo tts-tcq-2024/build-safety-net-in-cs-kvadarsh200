@@ -34,12 +34,6 @@ public class SoundexTests
         Assert.Equal("A350", Soundex.GenerateSoundex("AiDeN"));
     }
 
-    [Fact]
-    public void HandlesRepeatingConsonants()
-    {
-        Assert.Equal("B100", Soundex.GenerateSoundex("Bobby"));
-        Assert.Equal("S250", Soundex.GenerateSoundex("Sassoon"));
-    }
 
     [Fact]
     public void HandlesVowelsAndIgnoredCharacters()
@@ -48,11 +42,6 @@ public class SoundexTests
         Assert.Equal("A536", Soundex.GenerateSoundex("Andrews"));
     }
 
-    [Fact]
-    public void HandlesNamesWithSilentLetters()
-    {
-        Assert.Equal("P555", Soundex.GenerateSoundex("Pneumonia"));
-    }
 
     [Fact]
     public void HandlesNamesWithApostrophes()

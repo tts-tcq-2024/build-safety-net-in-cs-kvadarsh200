@@ -14,22 +14,32 @@ public class Soundex
         soundex.Append(char.ToUpper(name[0]));
         char prevCode = GetSoundexCode(name[0]);
 
+        ProcessCharacters(name, soundex, ref prevCode);
+
+        return PadSoundex(soundex).ToString();
+    }
+
+    private static void ProcessCharacters(string name, StringBuilder soundex, ref char prevCode)
+    {
         for (int i = 1; i < name.Length && soundex.Length < 4; i++)
         {
             AppendSoundexCode(name[i], soundex, ref prevCode);
         }
-
-        return PadSoundex(soundex).ToString();
     }
 
     private static void AppendSoundexCode(char c, StringBuilder soundex, ref char prevCode)
     {
         char code = GetSoundexCode(c);
-        if (code != '0' && code != prevCode)
+        if (IsAppendableCode(code, prevCode))
         {
             soundex.Append(code);
             prevCode = code;
         }
+    }
+
+    private static bool IsAppendableCode(char code, char prevCode)
+    {
+        return code != '0' && code != prevCode;
     }
 
     private static StringBuilder PadSoundex(StringBuilder soundex)

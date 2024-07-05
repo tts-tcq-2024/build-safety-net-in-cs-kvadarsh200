@@ -1,54 +1,45 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 public class Soundex
 {
-    private static readonly int[] soundexMapping = {
-        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
-        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
-        0, 1, 0, 2, 0, 2
+    private static readonly Dictionary<char, char> SoundexCodeMap = new Dictionary<char, char>
+    {
+        {'B', '1'}, {'F', '1'}, {'P', '1'}, {'V', '1'},
+        {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'}, {'Q', '2'}, {'S', '2'}, {'X', '2'}, {'Z', '2'},
+        {'D', '3'}, {'T', '3'},
+        {'L', '4'},
+        {'M', '5'}, {'N', '5'},
+        {'R', '6'}
     };
-
-    public static char GetSoundexCode(char c)
-    {
-        c = char.ToUpper(c);
-        if (c < 'A' || c > 'Z')
-        {
-            return '0';
-        }
-        return (char)(soundexMapping[c - 'A'] + '0');
-    }
-
-    private static void AppendSoundexCode(char code, StringBuilder soundex)
-    {
-        if (code != '0' && (soundex.Length == 0 || code != soundex[soundex.Length - 1]))
-        {
-            soundex.Append(code);
-        }
-    }
-
-    private static void FinalizeSoundex(StringBuilder soundex)
-    {
-        while (soundex.Length < 4)
-        {
-            soundex.Append('0');
-        }
-        soundex.Length = 4;
-    }
 
     public static string GenerateSoundex(string name)
     {
-        StringBuilder soundex = new StringBuilder();
-        soundex.Append(char.ToUpper(name[0]));
-
-        for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+        if (string.IsNullOrEmpty(name))
         {
-            char code = GetSoundexCode(name[i]);
-            AppendSoundexCode(code, soundex);
+            return string.Empty;
         }
 
-        FinalizeSoundex(soundex);
-        return soundex.ToString();
+        StringBuilder soundex = new StringBuilder(4);
+        soundex.Append(char.ToUpper(name[0]));
+
+        for (int i = 1, j = 0; i < name.Length && j < 3; i++)
+        {
+            char code = GetSoundexCode(name[i]);
+            if (code != '0' && (j == 0 || code != soundex[j]))
+            {
+                soundex.Append(code);
+                j++;
+            }
+        }
+
+        return soundex.ToString().PadRight(4, '0');
+    }
+
+    private static char GetSoundexCode(char c)
+    {
+        c = char.ToUpper(c);
+        return SoundexCodeMap.GetValueOrDefault(c, '0');
     }
 }
-

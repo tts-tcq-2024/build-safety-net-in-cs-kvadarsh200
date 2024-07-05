@@ -4,13 +4,12 @@ using System.Text;
 
 public class Soundex
 {
-    private static readonly Dictionary<char, char> SoundexMapping = new Dictionary<char, char>
+    private static readonly Dictionary<char, char> SoundexCodeMap = new Dictionary<char, char>
     {
         {'B', '1'}, {'F', '1'}, {'P', '1'}, {'V', '1'},
-        {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'}, {'Q', '2'}, 
-        {'S', '2'}, {'X', '2'}, {'Z', '2'},
+        {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'}, {'Q', '2'}, {'S', '2'}, {'X', '2'}, {'Z', '2'},
         {'D', '3'}, {'T', '3'},
-        {'L', '4'}, 
+        {'L', '4'},
         {'M', '5'}, {'N', '5'},
         {'R', '6'}
     };
@@ -47,6 +46,6 @@ public class Soundex
     private static char GetSoundexCode(char c)
     {
         c = char.ToUpper(c);
-        return SoundexMapping.ContainsKey(c) ? SoundexMapping[c] : '0';
+        return SoundexCodeMap.GetValueOrDefault(c, '0');
     }
 }

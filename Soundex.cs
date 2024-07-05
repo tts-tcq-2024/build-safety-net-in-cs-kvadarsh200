@@ -3,6 +3,7 @@ using System.Text;
 
 public class Soundex
 {
+   
     public static string GenerateSoundex(string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -12,57 +13,46 @@ public class Soundex
 
         StringBuilder soundex = new StringBuilder();
         soundex.Append(char.ToUpper(name[0]));
-        char prevCode = GetSoundexCode(name[0]);
+        int sIndex = 1;
 
-        for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+        for (int i = 1; i < name.Length && sIndex < 4; i++)
         {
             char code = GetSoundexCode(name[i]);
-            if (code != '0' && code != prevCode)
-            {
-                soundex.Append(code);
-                prevCode = code;
-            }
+            AppendSoundexCode(code, soundex, ref sIndex);
         }
 
-        while (soundex.Length < 4)
-        {
-            soundex.Append('0');
-        }
+        FinalizeSoundex(soundex, sIndex);
 
         return soundex.ToString();
     }
-
-    private static char GetSoundexCode(char c)
+      private static void FinalizeSoundex(StringBuilder soundex, int sIndex)
+    {
+        while (sIndex < 4)
+        {
+            soundex.Append('0');
+            sIndex++;
+        }
+    }
+    private static void AppendSoundexCode(char code, StringBuilder soundex, ref int sIndex)
+    {
+        if (code != '0' && (sIndex == 1 || code != soundex[sIndex - 1]))
+        {
+            soundex.Append(code);
+            sIndex++;
+        }
+    }
+   private static readonly int[] soundexMapping = new int[26] {
+        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
+        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
+        0, 1, 0, 2, 0, 2
+    };
+   private static char GetSoundexCode(char c)
     {
         c = char.ToUpper(c);
-        switch (c)
+        if (c < 'A' || c > 'Z')
         {
-            case 'B':
-            case 'F':
-            case 'P':
-            case 'V':
-                return '1';
-            case 'C':
-            case 'G':
-            case 'J':
-            case 'K':
-            case 'Q':
-            case 'S':
-            case 'X':
-            case 'Z':
-                return '2';
-            case 'D':
-            case 'T':
-                return '3';
-            case 'L':
-                return '4';
-            case 'M':
-            case 'N':
-                return '5';
-            case 'R':
-                return '6';
-            default:
-                return '0'; // For A, E, I, O, U, H, W, Y
+            return '0';
         }
+        return (char)('0' + soundexMapping[c - 'A']);
     }
 }

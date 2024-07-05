@@ -1,9 +1,13 @@
 using System;
 using System.Text;
-
 public class Soundex
 {
-   
+    private static readonly int[] soundexMapping = new int[26] {
+        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
+        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
+        0, 1, 0, 2, 0, 2
+    };
+
     public static string GenerateSoundex(string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -25,7 +29,8 @@ public class Soundex
 
         return soundex.ToString();
     }
-      private static void FinalizeSoundex(StringBuilder soundex, int sIndex)
+
+    private static void FinalizeSoundex(StringBuilder soundex, int sIndex)
     {
         while (sIndex < 4)
         {
@@ -33,6 +38,7 @@ public class Soundex
             sIndex++;
         }
     }
+
     private static void AppendSoundexCode(char code, StringBuilder soundex, ref int sIndex)
     {
         if (code != '0' && (sIndex == 1 || code != soundex[sIndex - 1]))
@@ -41,12 +47,8 @@ public class Soundex
             sIndex++;
         }
     }
-   private static readonly int[] soundexMapping = new int[26] {
-        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
-        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
-        0, 1, 0, 2, 0, 2
-    };
-   private static char GetSoundexCode(char c)
+
+    private static char GetSoundexCode(char c)
     {
         c = char.ToUpper(c);
         if (c < 'A' || c > 'Z')

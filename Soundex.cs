@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 public class Soundex
 {
-    private static readonly Dictionary<char, char> SoundexCodeMap = new Dictionary<char, char>
+    private static readonly int[] soundexMapping = new int[26]
     {
-        {'B', '1'}, {'F', '1'}, {'P', '1'}, {'V', '1'},
-        {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'}, {'Q', '2'}, {'S', '2'}, {'X', '2'}, {'Z', '2'},
-        {'D', '3'}, {'T', '3'},
-        {'L', '4'},
-        {'M', '5'}, {'N', '5'},
-        {'R', '6'}
+        0, 1, 2, 3, 0, 1, 2, 0, 0, 2,
+        2, 4, 5, 5, 0, 1, 2, 6, 2, 3,
+        0, 1, 0, 2, 0, 2
     };
 
     public static string GenerateSoundex(string name)
@@ -22,18 +18,54 @@ public class Soundex
         }
 
         StringBuilder soundex = new StringBuilder();
-        soundex.Append(char.ToUpper(name[0]));
-        char prevCode = GetSoundexCode(name[0]);
+        char firstLetter = char.ToUpper(name[0]);
+        soundex.Append(firstLetter);
 
-        for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+        string encodedName = EncodeName(name.Substring(1));
+        string filteredName = FilterEncodedName(encodedName, firstLetter);
+
+        return FinalizeSoundex(filteredName, firstLetter);
+    }
+
+    private static string EncodeName(string name)
+    {
+        StringBuilder encoded = new StringBuilder();
+
+        foreach (char c in name)
         {
-            char code = GetSoundexCode(name[i]);
-            if (code != '0' && code != prevCode)
+            encoded.Append(GetSoundexCode(c));
+        }
+
+        return encoded.ToString();
+    }
+
+    private static string FilterEncodedName(string encodedName, char firstLetter)
+    {
+        StringBuilder filtered = new StringBuilder();
+        char previousCode = GetSoundexCode(firstLetter);
+
+        foreach (char code in encodedName)
+        {
+            if (code != '0' && code != previousCode)
             {
-                soundex.Append(code);
-                prevCode = code;
+                filtered.Append(code);
+                previousCode = code;
+            }
+
+            if (filtered.Length == 3)
+            {
+                break;
             }
         }
+
+        return filtered.ToString();
+    }
+
+    private static string FinalizeSoundex(string filteredName, char firstLetter)
+    {
+        StringBuilder soundex = new StringBuilder();
+        soundex.Append(firstLetter);
+        soundex.Append(filteredName);
 
         while (soundex.Length < 4)
         {
@@ -46,6 +78,10 @@ public class Soundex
     private static char GetSoundexCode(char c)
     {
         c = char.ToUpper(c);
-        return SoundexCodeMap.GetValueOrDefault(c, '0');
+        if (c < 'A' || c > 'Z')
+        {
+            return '0';
+        }
+        return (char)('0' + soundexMapping[c - 'A']);
     }
 }

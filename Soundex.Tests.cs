@@ -19,26 +19,26 @@ public class SoundexTests
     public void HandlesLowercaseInput()
     {
         Assert.Equal("A000", Soundex.GenerateSoundex("a"));
-        Assert.Equal("A123", Soundex.GenerateSoundex("aiden"));
+        Assert.Equal("A350", Soundex.GenerateSoundex("aiden"));
     }
 
     [Fact]
     public void HandlesUppercaseInput()
     {
-        Assert.Equal("A123", Soundex.GenerateSoundex("AIDEN"));
+        Assert.Equal("A350", Soundex.GenerateSoundex("AIDEN"));
     }
 
     [Fact]
     public void HandlesMixedCaseInput()
     {
-        Assert.Equal("A123", Soundex.GenerateSoundex("AiDeN"));
+        Assert.Equal("A350", Soundex.GenerateSoundex("AiDeN"));
     }
 
     [Fact]
     public void HandlesRepeatingConsonants()
     {
-        Assert.Equal("B120", Soundex.GenerateSoundex("Bobby"));
-        Assert.Equal("S530", Soundex.GenerateSoundex("Sassoon"));
+        Assert.Equal("B100", Soundex.GenerateSoundex("Bobby"));
+        Assert.Equal("S250", Soundex.GenerateSoundex("Sassoon"));
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class SoundexTests
     [Fact]
     public void HandlesNamesWithSilentLetters()
     {
-        Assert.Equal("P536", Soundex.GenerateSoundex("Pneumonia"));
+        Assert.Equal("P555", Soundex.GenerateSoundex("Pneumonia"));
     }
 
     [Fact]
@@ -63,13 +63,13 @@ public class SoundexTests
     [Fact]
     public void HandlesHyphenatedNames()
     {
-        Assert.Equal("S530", Soundex.GenerateSoundex("Smith-Jones"));
+        Assert.Equal("S532", Soundex.GenerateSoundex("Smith-Jones"));
     }
 
     [Fact]
     public void HandlesNamesWithSpaces()
     {
-        Assert.Equal("S530", Soundex.GenerateSoundex("Smith Jones"));
+        Assert.Equal("S532", Soundex.GenerateSoundex("Smith Jones"));
     }
 
     [Fact]

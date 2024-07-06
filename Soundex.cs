@@ -35,17 +35,12 @@ public class Soundex
     {
         for (int i = 1; i < name.Length && soundex.Length < 4; i++)
         {
-            AppendSoundexCode(name[i], soundex, ref prevCode);
-        }
-    }
-
-    private static void AppendSoundexCode(char c, StringBuilder soundex, ref char prevCode)
-    {
-        char code = GetSoundexCode(c);
-        if (IsAppendableCode(code, prevCode))
-        {
-            soundex.Append(code);
-            prevCode = code;
+            char code = GetSoundexCode(name[i]);
+            if (IsAppendableCode(code, prevCode))
+            {
+                soundex.Append(code);
+                prevCode = code;
+            }
         }
     }
 
@@ -67,6 +62,6 @@ public class Soundex
     private static char GetSoundexCode(char c)
     {
         c = char.ToUpper(c);
-        return soundexMap.ContainsKey(c) ? soundexMap[c] : '0';
+        return soundexMap.TryGetValue(c, out char code) ? code : '0';
     }
 }
